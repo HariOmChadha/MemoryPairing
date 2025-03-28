@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import MainPage from './components/MainPage';
-import Game from './components/Game';
+import MainPage from './MainPage';
+import Game from './Game';
 import './App.css';
 
 const App = () => {
-  const [page, setPage] = useState('main'); // 'main', 'gameNoMusic', 'gameWithMusic', 'results'
+  const [page, setPage] = useState('main');
   const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
@@ -15,6 +15,7 @@ const App = () => {
     noMusic: { time: null, score: null },
     withMusic: { time: null, score: null },
   });
+  const [showNextButton, setShowNextButton] = useState(false); // New state for Next button
 
   const handleStartGame = (data) => {
     setUserData(data);
@@ -27,19 +28,26 @@ const App = () => {
         ...prev,
         noMusic: { time, score },
       }));
-      setPage('gameWithMusic');
+      setShowNextButton(true); // Show the Next button instead of transitioning
     } else if (page === 'gameWithMusic') {
-      setResults((prev) => ({
-        ...prev,
+      const updatedResults = {
+        ...results,
         withMusic: { time, score },
-      }));
+      };
+      setResults(updatedResults);
       setPage('results');
     }
   };
 
+  const handleNext = () => {
+    setShowNextButton(false); // Hide the Next button
+    setPage('gameWithMusic'); // Transition to Round 2
+  };
+
   const resultsPage = () => (
     <div className="results">
-      <h2>Game Results for {userData.firstName} {userData.lastName}</h2>
+      <h2>Thanks a lot!</h2>
+      <h3>Game Results for {userData.firstName} {userData.lastName}</h3>
       <p>No Music - Time: {results.noMusic.time?.toFixed(2)} seconds, Accuracy: {results.noMusic.score}/12</p>
       <p>With Music - Time: {results.withMusic.time?.toFixed(2)} seconds, Accuracy: {results.withMusic.score}/12</p>
     </div>
@@ -50,16 +58,31 @@ const App = () => {
       {page === 'main' && <MainPage onStartGame={handleStartGame} />}
       {page === 'gameNoMusic' && (
         <div className="game-container">
-          <Game onGameFinish={handleGameFinish} playMusic={false} />
+          <Game
+            onGameFinish={handleGameFinish}
+            playMusic={false}
+            showNextButton={showNextButton}
+            onNext={handleNext}
+          />
         </div>
       )}
       {page === 'gameWithMusic' && (
         <div className="game-container">
-          <Game onGameFinish={handleGameFinish} playMusic={true} />
-          <audio autoPlay loop>
-            <source src="path/to/your/music.mp3" type="audio/mpeg" />
-            Your browser does not support the audio element.
-          </audio>
+          <Game
+            onGameFinish={handleGameFinish}
+            playMusic={true}
+            showNextButton={false}
+            onNext={handleNext}
+          />
+          <iframe
+            width="0"
+            height="0"
+            src="https://www.youtube.com/embed/pfs3AsE_sHI?start=273&autoplay=1&loop=1&playlist=pfs3AsE_sHI"
+            frameBorder="0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            title="background music"
+          ></iframe>
         </div>
       )}
       {page === 'results' && resultsPage()}
