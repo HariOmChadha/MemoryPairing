@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/MemoryParing/static/css/main.2a6c4253.css",
+    "main.js": "/MemoryParing/static/js/main.d430c763.js",
+    "index.html": "/MemoryParing/index.html",
+    "main.2a6c4253.css.map": "/MemoryParing/static/css/main.2a6c4253.css.map",
+    "main.d430c763.js.map": "/MemoryParing/static/js/main.d430c763.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2a6c4253.css",
+    "static/js/main.d430c763.js"
+  ]
+}
