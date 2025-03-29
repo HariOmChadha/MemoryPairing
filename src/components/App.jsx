@@ -34,6 +34,7 @@ const App = () => {
   const handleGameFinish = (time, score) => {
     if (page === 'test_run') {
       // After the test run, proceed to Round 1
+      alert('Scrore: ' + score + '/4.');
       const rounds = ['gameNoMusic', 'gameWithMusic'];
       const firstRound = rounds[Math.floor(Math.random() * rounds.length)]; // Randomly pick Round 1
       setPage(firstRound); // Set the first round
