@@ -22,34 +22,48 @@ const App = () => {
 
   const handleStartGame = (data) => {
     setUserData(data);
-
-    // Randomize the first round (either gameNoMusic or gameWithMusic)
-    const rounds = ['gameNoMusic', 'gameWithMusic'];
-    const firstRound = rounds[Math.floor(Math.random() * rounds.length)]; // Randomly pick Round 1
-    setPage(firstRound); // Set the first round
-    setRoundOrder([firstRound]); // Initialize the round order with the first round
-    setCurrentRoundIndex(0); // Start with Round 1
+    // Start with the test run instead of Round 1
+    setPage('test_run');
+    setCurrentRoundIndex(-1); // Indicate test run (not part of the main rounds)
   };
 
   const handleSubmissionComplete = () => {
-    // Optionally, you can redirect or show a final message here
     console.log('Submission complete');
   };
 
   const handleGameFinish = (time, score) => {
-    if (page === 'gameNoMusic') {
+    if (page === 'test_run') {
+      // After the test run, proceed to Round 1
+      const rounds = ['gameNoMusic', 'gameWithMusic'];
+      const firstRound = rounds[Math.floor(Math.random() * rounds.length)]; // Randomly pick Round 1
+      setPage(firstRound); // Set the first round
+      setRoundOrder([firstRound]); // Initialize the round order with the first round
+      setCurrentRoundIndex(0); // Start with Round 1
+      setShowNextButton(false); // Ensure the Next button is hidden
+    } else if (page === 'gameNoMusic') {
       setResults((prev) => ({
         ...prev,
         noMusic: { time, score },
       }));
-      setShowNextButton(true); // Show the Next button instead of transitioning
+      if (currentRoundIndex === 0) {
+        // If this is the first round, show the Next button
+        setShowNextButton(true);
+      } else {
+        // If this is the second round, go to results page
+        setPage('results');
+      }
     } else if (page === 'gameWithMusic') {
-      const updatedResults = {
-        ...results,
+      setResults((prev) => ({
+        ...prev,
         withMusic: { time, score },
-      };
-      setResults(updatedResults);
-      setPage('results');
+      }));
+      if (currentRoundIndex === 0) {
+        // If this is the first round, show the Next button
+        setShowNextButton(true);
+      } else {
+        // If this is the second round, go to results page
+        setPage('results');
+      }
     }
   };
 
@@ -82,12 +96,27 @@ const App = () => {
   return (
     <div className="app">
       {page === 'main' && <MainPage onStartGame={handleStartGame} />}
+      {page === 'test_run' && (
+        <div className="game-container">
+          <Game
+            onGameFinish={handleGameFinish}
+            showNextButton={showNextButton}
+            onNext={handleNext}
+            round="Test Run"
+            numCards={4} // Test run with 5 cards
+            memorizationTime={15} // Test run with 15 seconds
+          />
+        </div>
+      )}
       {page === 'gameNoMusic' && (
         <div className="game-container">
           <Game
             onGameFinish={handleGameFinish}
             showNextButton={showNextButton}
             onNext={handleNext}
+            round={currentRoundIndex === 0 ? 'Round 1' : 'Round 2'}
+            numCards={12} // Regular rounds with 12 cards
+            memorizationTime={30} // Regular rounds with 30 seconds
           />
         </div>
       )}
@@ -97,6 +126,9 @@ const App = () => {
             onGameFinish={handleGameFinish}
             showNextButton={showNextButton}
             onNext={handleNext}
+            round={currentRoundIndex === 0 ? 'Round 1' : 'Round 2'}
+            numCards={12} // Regular rounds with 12 cards
+            memorizationTime={30} // Regular rounds with 30 seconds
           />
           <iframe
             width="0"

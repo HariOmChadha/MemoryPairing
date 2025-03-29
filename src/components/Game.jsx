@@ -4,15 +4,15 @@ const LOCAL = "MemoryParing/";
 const ONLINE = "https://hariomchadha.github.io/MemoryParing";
 const BASE = ONLINE;
 
-const Game = ({ onGameFinish, showNextButton, onNext, round }) => {
+const Game = ({ onGameFinish, showNextButton, onNext, round, numCards, memorizationTime }) => {
   const cardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]; // Ace to King
   const [diamonds, setDiamonds] = useState([]);
   const [spades, setSpades] = useState([]);
   const [gameStarted, setGameStarted] = useState(false);
-  const [gameFinished, setGameFinished] = useState(false); // New state to track if the game is finished
+  const [gameFinished, setGameFinished] = useState(false);
   const [startTime, setStartTime] = useState(null);
   const [finishDisabled, setFinishDisabled] = useState(true);
-  const [memorizationTime, setMemorizationTime] = useState(30); // 30 seconds for memorization
+  const [memorizationTimeLeft, setMemorizationTimeLeft] = useState(memorizationTime); // Use prop
   const [isMemorizing, setIsMemorizing] = useState(false);
 
   const getCardName = (value, suit) => {
@@ -35,26 +35,26 @@ const Game = ({ onGameFinish, showNextButton, onNext, round }) => {
     if (gameStarted || gameFinished) return; // Prevent restarting the same round
     setGameStarted(true);
     setIsMemorizing(true);
-    setMemorizationTime(30);
+    setMemorizationTimeLeft(memorizationTime); // Reset to the prop value
 
-    const shuffledDiamonds = shuffle([...cardValues.slice(0, 12)]);
+    const shuffledDiamonds = shuffle([...cardValues.slice(0, numCards)]); // Use numCards prop
     setDiamonds(shuffledDiamonds);
     setSpades(shuffle([...shuffledDiamonds]));
 
-    setTimeout(flipSpades, 30000); // 30 seconds for memorization
+    setTimeout(flipSpades, memorizationTime * 1000); // Use memorizationTime prop
   };
 
   useEffect(() => {
     let timer;
-    if (isMemorizing && memorizationTime > 0) {
+    if (isMemorizing && memorizationTimeLeft > 0) {
       timer = setInterval(() => {
-        setMemorizationTime((prev) => prev - 1);
+        setMemorizationTimeLeft((prev) => prev - 1);
       }, 1000);
-    } else if (memorizationTime === 0) {
+    } else if (memorizationTimeLeft === 0) {
       setIsMemorizing(false);
     }
     return () => clearInterval(timer);
-  }, [isMemorizing, memorizationTime]);
+  }, [isMemorizing, memorizationTimeLeft]);
 
   const flipSpades = () => {
     setSpades((prevSpades) =>
@@ -138,9 +138,8 @@ const Game = ({ onGameFinish, showNextButton, onNext, round }) => {
       }
     });
 
-    // alert(`Game Finished!\nTime taken: ${timeTaken.toFixed(2)} seconds\nCorrect matches: ${score} out of 12`);
     onGameFinish(timeTaken, score);
-    setGameFinished(true); // Mark the game as finished
+    setGameFinished(true);
     setGameStarted(false);
     setDiamonds([]);
     setSpades([]);
@@ -150,10 +149,10 @@ const Game = ({ onGameFinish, showNextButton, onNext, round }) => {
     <div className="game">
       <div className="game-container">
         <h1>Pair Association Learning Game</h1>
-        <h2>{round}</h2> {/* Display the current round */}
+        <h2>{round}</h2>
         {isMemorizing && (
           <div className="timer">
-            <p>Memorization Time Remaining: {memorizationTime} seconds</p>
+            <p>Memorization Time Remaining: {memorizationTimeLeft} seconds</p>
           </div>
         )}
         {!isMemorizing && !showNextButton && !gameFinished && (
@@ -174,7 +173,7 @@ const Game = ({ onGameFinish, showNextButton, onNext, round }) => {
           )}
           {showNextButton && (
             <button onClick={onNext}>
-              Start Round 2
+              Start Round {round === 'Test Run' ? '1' : '2'}
             </button>
           )}
         </div>
