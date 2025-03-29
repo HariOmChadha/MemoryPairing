@@ -16,12 +16,15 @@ const MainPage = ({ onStartGame }) => {
   return (
     <div className="main-page">
       <div className="main-page-container">
-        <h1>Paired Associate Learning Game</h1>
+        <h1>Pair Association Learning Game</h1>
         <p>
-          Welcome to the ECE286 survey! Please fill in the information below so we can confirm that you are a 2nd-year engineering student.
+          Welcome to the ECE286 survey! Please fill in the information below so we can confirm that you are a 2nd-year engineering Science student.
         </p>
         <p>
-          In this game, you will have 30 seconds to memorize the positions of the cards on the right side (Spades). After the 30 seconds, the set of cards on the right will turn over, and you will need to match the pairs with the cards on the left (Diamonds) based on your memory. There will be two rounds: the first round will be without music, and the second round will be with music. Please wear headphones and turn up your volume for the best experience during the music round.
+          In this game, you will have 30 seconds to memorize the positions of the cards on the right side (Spades). After the 30 seconds, the set of cards on the right will turn over, and you will need to match the pairs with the cards on the left (Diamonds) based on your memory. Note: The cards on the left will stay open throughout. 
+          <br />
+          <br />
+          There will be two rounds: without music and with music. <strong>Please wear headphones </strong>and turn up your volume for the intended data collection during the music round.
         </p>
         <div className="form-box">
           <label>

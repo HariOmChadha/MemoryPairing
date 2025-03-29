@@ -17,10 +17,18 @@ const App = () => {
     withMusic: { time: null, score: null },
   });
   const [showNextButton, setShowNextButton] = useState(false); // New state for Next button
+  const [roundOrder, setRoundOrder] = useState([]); // Tracks the order of rounds
+  const [currentRoundIndex, setCurrentRoundIndex] = useState(0); // Tracks the current round (0 for Round 1, 1 for Round 2)
 
   const handleStartGame = (data) => {
     setUserData(data);
-    setPage('gameNoMusic');
+
+    // Randomize the first round (either gameNoMusic or gameWithMusic)
+    const rounds = ['gameNoMusic', 'gameWithMusic'];
+    const firstRound = rounds[Math.floor(Math.random() * rounds.length)]; // Randomly pick Round 1
+    setPage(firstRound); // Set the first round
+    setRoundOrder([firstRound]); // Initialize the round order with the first round
+    setCurrentRoundIndex(0); // Start with Round 1
   };
 
   const handleSubmissionComplete = () => {
@@ -47,9 +55,16 @@ const App = () => {
 
   const handleNext = () => {
     setShowNextButton(false); // Hide the Next button
-    setPage('gameWithMusic'); // Transition to Round 2
+
+    // Set Round 2 to the round that hasn't been played yet
+    const firstRound = roundOrder[0];
+    const secondRound = firstRound === 'gameNoMusic' ? 'gameWithMusic' : 'gameNoMusic';
+    const newRoundOrder = [firstRound, secondRound]; // Round 2 is the opposite of Round 1
+    setRoundOrder(newRoundOrder); // Update the round order
+    setCurrentRoundIndex(1); // Move to Round 2
+    setPage(secondRound); // Transition to Round 2
   };
-  
+
   const resultsPage = () => (
     <div className="results">
       <h2>Thanks a lot!</h2>
@@ -71,7 +86,6 @@ const App = () => {
         <div className="game-container">
           <Game
             onGameFinish={handleGameFinish}
-            playMusic={false}
             showNextButton={showNextButton}
             onNext={handleNext}
           />
@@ -81,8 +95,7 @@ const App = () => {
         <div className="game-container">
           <Game
             onGameFinish={handleGameFinish}
-            playMusic={true}
-            showNextButton={false}
+            showNextButton={showNextButton}
             onNext={handleNext}
           />
           <iframe

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './Game.css';
 const LOCAL = "MemoryParing/";
-const ONLINE = "https://hariomchadha.github.io/";
+const ONLINE = "https://hariomchadha.github.io/MemoryParing";
 const BASE = ONLINE;
 
-const Game = ({ onGameFinish, playMusic, showNextButton, onNext, round }) => {
+const Game = ({ onGameFinish, showNextButton, onNext, round }) => {
   const cardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]; // Ace to King
   const [diamonds, setDiamonds] = useState([]);
   const [spades, setSpades] = useState([]);
@@ -41,7 +41,7 @@ const Game = ({ onGameFinish, playMusic, showNextButton, onNext, round }) => {
     setDiamonds(shuffledDiamonds);
     setSpades(shuffle([...shuffledDiamonds]));
 
-    setTimeout(flipSpades, 3000); // 30 seconds for memorization
+    setTimeout(flipSpades, 30000); // 30 seconds for memorization
   };
 
   useEffect(() => {
@@ -138,7 +138,7 @@ const Game = ({ onGameFinish, playMusic, showNextButton, onNext, round }) => {
       }
     });
 
-    alert(`Game Finished!\nTime taken: ${timeTaken.toFixed(2)} seconds\nCorrect matches: ${score} out of 12`);
+    // alert(`Game Finished!\nTime taken: ${timeTaken.toFixed(2)} seconds\nCorrect matches: ${score} out of 12`);
     onGameFinish(timeTaken, score);
     setGameFinished(true); // Mark the game as finished
     setGameStarted(false);
@@ -149,7 +149,7 @@ const Game = ({ onGameFinish, playMusic, showNextButton, onNext, round }) => {
   return (
     <div className="game">
       <div className="game-container">
-        <h1>Paired Associate Learning Game</h1>
+        <h1>Pair Association Learning Game</h1>
         <h2>{round}</h2> {/* Display the current round */}
         {isMemorizing && (
           <div className="timer">

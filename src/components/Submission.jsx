@@ -6,21 +6,24 @@ const Submission = ({ userData, results, onSubmissionComplete }) => {
   useEffect(() => {
     const submitData = async () => {
       try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycby3pcHM-QG3P4i99ox52HkKXrpD0gL9fYtQkt1eA5C2c-ZQXp0c8gFcD1YTVTGSNvIH/exec', {
-          method: 'POST',
-          mode: 'cors', // Required for cross-origin requests
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            noMusicTime: results.noMusic.time?.toFixed(2),
-            noMusicScore: results.noMusic.score,
-            withMusicTime: results.withMusic.time?.toFixed(2),
-            withMusicScore: results.withMusic.score,
-          }),
+        const url = new URL(
+          'https://script.google.com/macros/s/AKfycbzvJ6mv413pjsOxD71IKJ-TuJzkYyl5KlG6835RUDGZQD9_JkS6BARiYatEDvnMqZ3PuQ/exec'
+        );
+        url.searchParams.append('firstName', userData.firstName);
+        url.searchParams.append('lastName', userData.lastName);
+        url.searchParams.append('noMusicTime', results.noMusic.time?.toFixed(2));
+        url.searchParams.append('noMusicScore', results.noMusic.score);
+        url.searchParams.append('withMusicTime', results.withMusic.time?.toFixed(2));
+        url.searchParams.append('withMusicScore', results.withMusic.score);
+
+        const response = await fetch(url, {
+          method: 'GET',
+          mode: 'cors',
         });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
+        }
 
         const result = await response.json();
         if (result.status === 'success') {
@@ -29,6 +32,7 @@ const Submission = ({ userData, results, onSubmissionComplete }) => {
           setSubmissionStatus('Error submitting data: ' + result.message);
         }
       } catch (error) {
+        console.error('Submission error:', error);
         setSubmissionStatus('Error submitting data: ' + error.message);
       } finally {
         onSubmissionComplete();
