@@ -39,3 +39,9 @@
   max-width: 1200px; /* Match Game.css */
   width: 100%;
 }
+
+.submission-status h3{
+  margin-top: 20px;
+  font-size: 18px;
+  color: #333;
+}

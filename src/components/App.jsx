@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MainPage from './MainPage';
 import Game from './Game';
+import Submission from './Submission';
 import './App.css';
 
 const App = () => {
@@ -20,6 +21,11 @@ const App = () => {
   const handleStartGame = (data) => {
     setUserData(data);
     setPage('gameNoMusic');
+  };
+
+  const handleSubmissionComplete = () => {
+    // Optionally, you can redirect or show a final message here
+    console.log('Submission complete');
   };
 
   const handleGameFinish = (time, score) => {
@@ -43,13 +49,18 @@ const App = () => {
     setShowNextButton(false); // Hide the Next button
     setPage('gameWithMusic'); // Transition to Round 2
   };
-
+  
   const resultsPage = () => (
     <div className="results">
       <h2>Thanks a lot!</h2>
       <h3>Game Results for {userData.firstName} {userData.lastName}</h3>
       <p>No Music - Time: {results.noMusic.time?.toFixed(2)} seconds, Accuracy: {results.noMusic.score}/12</p>
       <p>With Music - Time: {results.withMusic.time?.toFixed(2)} seconds, Accuracy: {results.withMusic.score}/12</p>
+      <Submission
+        userData={userData}
+        results={results}
+        onSubmissionComplete={handleSubmissionComplete}
+      />
     </div>
   );
 

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Game.css';
+const LOCAL = "MemoryParing/";
+const ONLINE = "https://hariomchadha.github.io/";
+const BASE = ONLINE;
 
 const Game = ({ onGameFinish, playMusic, showNextButton, onNext, round }) => {
   const cardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]; // Ace to King
@@ -130,7 +133,7 @@ const Game = ({ onGameFinish, playMusic, showNextButton, onNext, round }) => {
         if (diamondValue === spadeValue) {
           score++;
         }
-        spade.style.backgroundImage = `url('/images/${getCardName(spadeValue, "spades")}')`;
+        spade.style.backgroundImage = `url('${BASE}/images/${getCardName(spadeValue, "spades")}')`;
         spade.classList.remove('hidden');
       }
     });
@@ -151,6 +154,11 @@ const Game = ({ onGameFinish, playMusic, showNextButton, onNext, round }) => {
         {isMemorizing && (
           <div className="timer">
             <p>Memorization Time Remaining: {memorizationTime} seconds</p>
+          </div>
+        )}
+        {!isMemorizing && !showNextButton && !gameFinished && (
+          <div className="timer">
+            <p>Match the pairs!!</p>
           </div>
         )}
         <div className="button-container">
@@ -181,7 +189,7 @@ const Game = ({ onGameFinish, playMusic, showNextButton, onNext, round }) => {
                     <div
                       className="card diamond-card"
                       style={{
-                        backgroundImage: `url('/images/${getCardName(value, "diamonds")}')`,
+                        backgroundImage: `url('${BASE}/images/${getCardName(value, "diamonds")}')`,
                       }}
                       data-value={value}
                     ></div>
@@ -204,8 +212,8 @@ const Game = ({ onGameFinish, playMusic, showNextButton, onNext, round }) => {
                       className={`card spade-card ${spade.hidden ? "hidden" : ""}`}
                       style={{
                         backgroundImage: spade.hidden
-                          ? "url('/images/back.png')"
-                          : `url('/images/${getCardName(spade.value || spade, "spades")}')`,
+                          ? `url('${BASE}/images/back.png')`
+                          : `url('${BASE}/images/${getCardName(spade.value || spade, "spades")}')`,
                       }}
                       data-value={spade.value || spade}
                       draggable={spade.draggable || false}
