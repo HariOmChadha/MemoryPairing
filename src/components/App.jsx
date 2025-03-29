@@ -32,52 +32,42 @@ const App = () => {
   };
 
   const handleGameFinish = (time, score) => {
-    if (page === 'test_run') {
-      // After the test run, proceed to Round 1
-      alert('Scrore: ' + score + '/4.');
-      const rounds = ['gameNoMusic', 'gameWithMusic'];
-      const firstRound = rounds[Math.floor(Math.random() * rounds.length)]; // Randomly pick Round 1
-      setPage(firstRound); // Set the first round
-      setRoundOrder([firstRound]); // Initialize the round order with the first round
-      setCurrentRoundIndex(0); // Start with Round 1
-      setShowNextButton(false); // Ensure the Next button is hidden
-    } else if (page === 'gameNoMusic') {
+    if (page === 'gameNoMusic') {
       setResults((prev) => ({
         ...prev,
         noMusic: { time, score },
       }));
-      if (currentRoundIndex === 0) {
-        // If this is the first round, show the Next button
-        setShowNextButton(true);
-      } else {
-        // If this is the second round, go to results page
-        setPage('results');
-      }
     } else if (page === 'gameWithMusic') {
       setResults((prev) => ({
         ...prev,
         withMusic: { time, score },
       }));
+    }
+  };
+  
+  const handleNext = () => {
+  
+    if (page === 'test_run') {
+      // After the test run, proceed to Round 1
+      const rounds = ['gameNoMusic', 'gameWithMusic'];
+      const firstRound = rounds[Math.floor(Math.random() * rounds.length)]; // Randomly pick Round 1
+      setPage(firstRound);
+      setRoundOrder([firstRound]);
+      setCurrentRoundIndex(0);
+    } else if (page === 'gameNoMusic' || page === 'gameWithMusic') {
       if (currentRoundIndex === 0) {
-        // If this is the first round, show the Next button
-        setShowNextButton(true);
+        // After Round 1, proceed to Round 2
+        const firstRound = roundOrder[0];
+        const secondRound = firstRound === 'gameNoMusic' ? 'gameWithMusic' : 'gameNoMusic';
+        const newRoundOrder = [firstRound, secondRound];
+        setRoundOrder(newRoundOrder);
+        setCurrentRoundIndex(1);
+        setPage(secondRound);
       } else {
-        // If this is the second round, go to results page
+        // After Round 2, go to results page
         setPage('results');
       }
     }
-  };
-
-  const handleNext = () => {
-    setShowNextButton(false); // Hide the Next button
-
-    // Set Round 2 to the round that hasn't been played yet
-    const firstRound = roundOrder[0];
-    const secondRound = firstRound === 'gameNoMusic' ? 'gameWithMusic' : 'gameNoMusic';
-    const newRoundOrder = [firstRound, secondRound]; // Round 2 is the opposite of Round 1
-    setRoundOrder(newRoundOrder); // Update the round order
-    setCurrentRoundIndex(1); // Move to Round 2
-    setPage(secondRound); // Transition to Round 2
   };
 
   const resultsPage = () => (
@@ -105,7 +95,7 @@ const App = () => {
             onNext={handleNext}
             round="Test Run"
             numCards={4} // Test run with 5 cards
-            memorizationTime={15} // Test run with 15 seconds
+            memorizationTime={10} // Test run with 15 seconds
           />
         </div>
       )}

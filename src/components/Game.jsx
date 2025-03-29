@@ -14,6 +14,8 @@ const Game = ({ onGameFinish, showNextButton, onNext, round, numCards, memorizat
   const [finishDisabled, setFinishDisabled] = useState(true);
   const [memorizationTimeLeft, setMemorizationTimeLeft] = useState(memorizationTime); // Use prop
   const [isMemorizing, setIsMemorizing] = useState(false);
+  const [score, setScore] = useState(0);
+  const [timeTaken, setTimeTaken] = useState(0);
 
   const getCardName = (value, suit) => {
     const specialNames = { 1: "ace", 11: "jack", 12: "queen", 13: "king" };
@@ -119,8 +121,8 @@ const Game = ({ onGameFinish, showNextButton, onNext, round, numCards, memorizat
 
   const finishGame = () => {
     const endTime = Date.now();
-    const timeTaken = (endTime - startTime) / 1000;
-    let score = 0;
+    const timeTaken_temp = (endTime - startTime) / 1000;
+    let score_temp = 0;
 
     document.querySelectorAll('.pair').forEach((pair) => {
       const diamond = pair.querySelector('.diamond-card');
@@ -131,19 +133,26 @@ const Game = ({ onGameFinish, showNextButton, onNext, round, numCards, memorizat
         const diamondValue = diamond.getAttribute('data-value');
         const spadeValue = spade.getAttribute('data-value');
         if (diamondValue === spadeValue) {
-          score++;
+          score_temp++;
         }
         spade.style.backgroundImage = `url('${BASE}/images/${getCardName(spadeValue, "spades")}')`;
         spade.classList.remove('hidden');
       }
     });
+    setScore(score_temp);
+    setTimeTaken(timeTaken_temp);
 
-    onGameFinish(timeTaken, score);
     setGameFinished(true);
+    onGameFinish(timeTaken_temp, score_temp);
+  };
+
+  const Next = () => {
     setGameStarted(false);
     setDiamonds([]);
     setSpades([]);
-  };
+    onNext();
+  }
+
 
   return (
     <div className="game">
@@ -160,6 +169,11 @@ const Game = ({ onGameFinish, showNextButton, onNext, round, numCards, memorizat
             <p>Match the pairs!!</p>
           </div>
         )}
+        {gameFinished && (
+          <div className="timer">
+            <p>Game finished! Time taken: {timeTaken} seconds, Score: {score}</p>
+           </div>
+           )}
         <div className="button-container">
           {!gameFinished && (
             <button onClick={startGame} disabled={gameStarted}>
@@ -171,9 +185,9 @@ const Game = ({ onGameFinish, showNextButton, onNext, round, numCards, memorizat
               Finish Game
             </button>
           )}
-          {showNextButton && (
-            <button onClick={onNext}>
-              Start Round {round === 'Test Run' ? '1' : '2'}
+          {gameFinished && (
+            <button onClick={Next}>
+              Next
             </button>
           )}
         </div>
