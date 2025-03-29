@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/MemoryParing/static/css/main.42eead22.css",
-    "main.js": "/MemoryParing/static/js/main.3cb27cc6.js",
+    "main.js": "/MemoryParing/static/js/main.2f5c6d5d.js",
     "index.html": "/MemoryParing/index.html",
     "main.42eead22.css.map": "/MemoryParing/static/css/main.42eead22.css.map",
-    "main.3cb27cc6.js.map": "/MemoryParing/static/js/main.3cb27cc6.js.map"
+    "main.2f5c6d5d.js.map": "/MemoryParing/static/js/main.2f5c6d5d.js.map"
   },
   "entrypoints": [
     "static/css/main.42eead22.css",
-    "static/js/main.3cb27cc6.js"
+    "static/js/main.2f5c6d5d.js"
   ]
 }
