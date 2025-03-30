@@ -15,8 +15,9 @@ const App = () => {
   const [results, setResults] = useState({
     noMusic: { time: null, score: null },
     withMusic: { time: null, score: null },
+    MusicFirst: false,
   });
-  const [showNextButton, setShowNextButton] = useState(false); // New state for Next button
+  //const [showNextButton, setShowNextButton] = useState(false); // New state for Next button
   const [roundOrder, setRoundOrder] = useState([]); // Tracks the order of rounds
   const [currentRoundIndex, setCurrentRoundIndex] = useState(0); // Tracks the current round (0 for Round 1, 1 for Round 2)
 
@@ -51,6 +52,12 @@ const App = () => {
       // After the test run, proceed to Round 1
       const rounds = ['gameNoMusic', 'gameWithMusic'];
       const firstRound = rounds[Math.floor(Math.random() * rounds.length)]; // Randomly pick Round 1
+      if (firstRound === 'gameWithMusic') {
+        setResults((prev) => ({
+          ...prev,
+          MusicFirst: true,
+        }));
+      }
       setPage(firstRound);
       setRoundOrder([firstRound]);
       setCurrentRoundIndex(0);
@@ -91,11 +98,11 @@ const App = () => {
         <div className="game-container">
           <Game
             onGameFinish={handleGameFinish}
-            showNextButton={showNextButton}
+            // showNextButton={showNextButton}
             onNext={handleNext}
             round="Test Run"
-            numCards={4} // Test run with 5 cards
-            memorizationTime={10} // Test run with 15 seconds
+            numCards={8} // Test run with 5 cards
+            memorizationTime={20} // Test run with 15 seconds
           />
         </div>
       )}
@@ -103,7 +110,7 @@ const App = () => {
         <div className="game-container">
           <Game
             onGameFinish={handleGameFinish}
-            showNextButton={showNextButton}
+            // showNextButton={showNextButton}
             onNext={handleNext}
             round={currentRoundIndex === 0 ? 'Round 1' : 'Round 2'}
             numCards={12} // Regular rounds with 12 cards
@@ -115,7 +122,7 @@ const App = () => {
         <div className="game-container">
           <Game
             onGameFinish={handleGameFinish}
-            showNextButton={showNextButton}
+            // showNextButton={showNextButton}
             onNext={handleNext}
             round={currentRoundIndex === 0 ? 'Round 1' : 'Round 2'}
             numCards={12} // Regular rounds with 12 cards

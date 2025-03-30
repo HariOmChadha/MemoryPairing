@@ -4,7 +4,7 @@ const LOCAL = "MemoryParing/";
 const ONLINE = "https://hariomchadha.github.io/MemoryParing";
 const BASE = ONLINE;
 
-const Game = ({ onGameFinish, showNextButton, onNext, round, numCards, memorizationTime }) => {
+const Game = ({ onGameFinish, onNext, round, numCards, memorizationTime }) => {
   const cardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]; // Ace to King
   const [diamonds, setDiamonds] = useState([]);
   const [spades, setSpades] = useState([]);
@@ -164,9 +164,9 @@ const Game = ({ onGameFinish, showNextButton, onNext, round, numCards, memorizat
             <p>Memorization Time Remaining: {memorizationTimeLeft} seconds</p>
           </div>
         )}
-        {!isMemorizing && !showNextButton && !gameFinished && (
+        {!isMemorizing && !gameFinished && (
           <div className="timer">
-            <p>Match the pairs!!</p>
+            <p>Drag and Drop the cards to match the pairs</p>
           </div>
         )}
         {gameFinished && (

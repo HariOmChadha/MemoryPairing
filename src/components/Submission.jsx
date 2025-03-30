@@ -7,7 +7,7 @@ const Submission = ({ userData, results, onSubmissionComplete }) => {
     const submitData = async () => {
       try {
         const url = new URL(
-          'https://script.google.com/macros/s/AKfycbzvJ6mv413pjsOxD71IKJ-TuJzkYyl5KlG6835RUDGZQD9_JkS6BARiYatEDvnMqZ3PuQ/exec'
+          'https://script.google.com/macros/s/AKfycbx71b0YoXhfRS6dYmZIsxEp1WOPpWUjzqO_1ADFASSckzllnetDG1g3wUTlrHvBMOuEig/exec'
         );
         url.searchParams.append('firstName', userData.firstName);
         url.searchParams.append('lastName', userData.lastName);
@@ -15,6 +15,7 @@ const Submission = ({ userData, results, onSubmissionComplete }) => {
         url.searchParams.append('noMusicScore', results.noMusic.score);
         url.searchParams.append('withMusicTime', results.withMusic.time?.toFixed(2));
         url.searchParams.append('withMusicScore', results.withMusic.score);
+        url.searchParams.append('musicFirst', results.MusicFirst);
 
         const response = await fetch(url, {
           method: 'GET',
