@@ -8,7 +8,7 @@ Memory Pairing is a React-based web app to test memory and pair association skil
 - Collects user data (first name, last name, demographics).
 - Submits results to a Google Sheet via Google Apps Script.
 - Polished UI with blue/green theme.
-- Hosted on GitHub Pages: [https://hariomchadha.github.io/MemoryParing/](https://hariomchadha.github.io/MemoryParing/)
+- Hosted on GitHub Pages: [https://hariomchadha.github.io/MemoryParing/](https://hariomchadha.github.io/MemoryPairing/)
 
 ## Usage
 1. Enter your details on the main page and click "Start Game".
